@@ -101,10 +101,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
         recyclerViewClickListener = new RecyclerViewClickListener() {
             @Override
             public void recyclerViewListClicked(View sharedView, int position) {
-//                Toast.makeText(MainActivity.this, "CLICK " + position + ", sharedView = " +
-//                        sharedView.getTransitionName(), Toast.LENGTH_SHORT).show();
-//                startIntentToSecondActivity(position, sharedView);
                 Log.d(TAG, "recyclerViewListClicked: ");
+//                mainPresenter.openSecondActivity();
             }
         };
     }
