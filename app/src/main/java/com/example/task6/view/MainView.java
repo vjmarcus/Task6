@@ -11,10 +11,10 @@ import moxy.viewstate.strategy.StateStrategyType;
 
 public interface MainView extends MvpView {
 
-    void showMessage(String message);
-
     void showStories(List<Story> storyList);
 
     void showTopics();
+
+    void setRefreshingToSwipe(Boolean isRefresh);
 
 }

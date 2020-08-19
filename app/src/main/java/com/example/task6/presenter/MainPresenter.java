@@ -18,13 +18,9 @@ public class MainPresenter extends MvpPresenter<MainView>  {
     private static final String TAG = "MyApp";
     private MainModel mainModel = new MainModel();
     private List<Story> storyList;
+
     public MainPresenter() {
         Log.d(TAG, "MainPresenter: constructor");
-    }
-
-    public void textViewClicked() {
-        getViewState().showMessage("TextView Clicked!");
-        Log.d(TAG, "textViewClicked:");
     }
 
     public void loadStories(String key) {
@@ -32,7 +28,19 @@ public class MainPresenter extends MvpPresenter<MainView>  {
             @Override
             public void onCompleteCallback(List<Story> storyList) {
                 Log.d(TAG, "Presenter onCompleteCallback: " + storyList.size());
-                getViewState().showMessage(storyList.get(0).getTitle());
+                getViewState().showStories(storyList);
+            }
+        });
+    }
+
+    public void loadStoriesWithRefresher(String key){
+        getViewState().setRefreshingToSwipe(true);
+        storyList = mainModel.loadStories(key, new LoadStoryCallback() {
+            @Override
+            public void onCompleteCallback(List<Story> storyList) {
+                Log.d(TAG, "Presenter onCompleteCallback: " + storyList.size());
+                getViewState().showStories(storyList);
+                getViewState().setRefreshingToSwipe(false);
             }
         });
     }
