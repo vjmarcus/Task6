@@ -1,8 +1,12 @@
 package com.example.task6.presenter;
 
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import com.example.task6.LoadStoryCallback;
+import com.example.task6.activity.MainActivity;
+import com.example.task6.activity.SecondActivity;
 import com.example.task6.data.Story;
 import com.example.task6.model.MainModel;
 import com.example.task6.view.MainView;

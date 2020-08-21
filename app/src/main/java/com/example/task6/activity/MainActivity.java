@@ -1,5 +1,6 @@
 package com.example.task6.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -25,7 +27,7 @@ import java.util.List;
 import moxy.MvpAppCompatActivity;
 import moxy.presenter.InjectPresenter;
 
-public class MainActivity extends MvpAppCompatActivity implements MainView, View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class MainActivity extends MvpAppCompatActivity implements MainView, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "MyApp";
     @InjectPresenter
@@ -36,7 +38,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
     private RecyclerView recyclerView;
     private String currentTopic;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,18 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
         loadDefault();
         init();
         initSwipeRefreshLayout();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        mainPresenter.loadStories(adapterView.getSelectedItem().toString());
+        Log.d(TAG, "Main onItemSelected: " + adapterView.getSelectedItem().toString());
+        currentTopic = adapterView.getSelectedItem().toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        //DO NOTHING
     }
 
     private void init() {
@@ -63,22 +76,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
     }
 
     @Override
-    public void showTopics() {
-
-    }
-
-    @Override
     public void setRefreshingToSwipe(Boolean isRefresh) {
         if (isRefresh){
             swipeRefreshLayout.setRefreshing(true);
         } else {
             swipeRefreshLayout.setRefreshing(false);
         }
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     private void loadDefault() {
@@ -100,22 +103,18 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, View
     private void initRecyclerViewClickListener() {
         recyclerViewClickListener = new RecyclerViewClickListener() {
             @Override
-            public void recyclerViewListClicked(View sharedView, int position) {
+            public void recyclerViewListClicked(View sharedView, Story story, int position) {
                 Log.d(TAG, "recyclerViewListClicked: ");
-//                mainPresenter.openSecondActivity();
+                goToSecondActivity(sharedView, story, position);
             }
         };
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        mainPresenter.loadStories(adapterView.getSelectedItem().toString());
-        Log.d(TAG, "Main onItemSelected: " + adapterView.getSelectedItem().toString());
-        currentTopic = adapterView.getSelectedItem().toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        //DO NOTHING
+    private void goToSecondActivity(View sharedView, Story story, int position) {
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra("obj", story);
+        ActivityOptionsCompat compat = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(MainActivity.this, sharedView, "transition");
+        startActivity(intent, compat.toBundle());
     }
 }

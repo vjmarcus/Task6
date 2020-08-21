@@ -72,7 +72,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
         @Override
         public void onClick(View view) {
-            recyclerViewClickListener.recyclerViewListClicked(urlImageView, this.getLayoutPosition());
+            recyclerViewClickListener.recyclerViewListClicked(urlImageView, storyList.get(getAdapterPosition()), this.getLayoutPosition());
         }
     }
 }

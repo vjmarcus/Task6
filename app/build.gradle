@@ -9,6 +9,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     defaultConfig {
         applicationId "com.example.task6"
         minSdkVersion 26
@@ -50,5 +54,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     //SwipeRefreshLayout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    //Mockito
+    implementation  'org.mockito:mockito-core:2.8.47'
 
 }
