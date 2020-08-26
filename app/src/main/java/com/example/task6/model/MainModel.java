@@ -1,5 +1,6 @@
 package com.example.task6.model;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -21,8 +22,6 @@ public class MainModel {
     private List<Story> storyList;
     private ApiFactory apiFactory;
     private NewsApi newsApi;
-    private ResponseListener responseListener;
-    private LoadStoryCallback loadStoryCallback;
 
     public MainModel() {
         apiFactory = ApiFactory.getInstance();
@@ -34,33 +33,7 @@ public class MainModel {
         loadStoriesAsyncTask.execute(key);
         return storyList;
     }
-
-    //    public List<Story> getStories(String key) {
-////        Call<StoryList> call = newsApi.getPostsByDate(key, ApiFactory.getCurrentDate(),
-////                ApiFactory.getCurrentDate(), 20, "en", ApiFactory.API_KEY);
-////        call.enqueue(new Callback<StoryList>() {
-////            @Override
-////            public void onResponse(@NonNull Call<StoryList> call, @NonNull Response<StoryList> response) {
-////                Log.d(TAG, "Model onResponse: " + response);
-////                StoryList articlesList = response.body();
-////                if (articlesList != null) {
-////                    storyList = articlesList.getArticles();
-////                    initRecyclerViewClickListener();
-////                    initRecycler();
-////                    Log.d(TAG, "onResponse: " + storyList.size());
-////                    responseListener.responseReceived(true);
-////                    responseListener.responseReceived(true);
-////                }
-////            }
-////
-////            @EverythingIsNonNull
-////            @Override
-////            public void onFailure(Call<StoryList> call, Throwable t) {
-////                Log.d(TAG, "model onFailure: " + t.getMessage());
-////            }
-////        });
-////        return storyList;
-////    }
+    @SuppressLint("StaticFieldLeak")
     class LoadStoriesAsyncTask extends AsyncTask<String, Void, List<Story>> {
 
         private LoadStoryCallback loadStoryCallback;

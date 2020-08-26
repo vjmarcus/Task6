@@ -23,28 +23,25 @@ public class MainPresenter extends MvpPresenter<MainView>  {
     private MainModel mainModel = new MainModel();
     private List<Story> storyList;
 
+
     public MainPresenter() {
         Log.d(TAG, "MainPresenter: constructor");
     }
 
     public void loadStories(String key) {
+        getViewState().startLoading();
+        // cuncurrent, or work manager or callable
         storyList = mainModel.loadStories(key, new LoadStoryCallback() {
             @Override
             public void onCompleteCallback(List<Story> storyList) {
-                Log.d(TAG, "Presenter onCompleteCallback: " + storyList.size());
-                getViewState().showStories(storyList);
-            }
-        });
-    }
-
-    public void loadStoriesWithRefresher(String key){
-        getViewState().setRefreshingToSwipe(true);
-        storyList = mainModel.loadStories(key, new LoadStoryCallback() {
-            @Override
-            public void onCompleteCallback(List<Story> storyList) {
-                Log.d(TAG, "Presenter onCompleteCallback: " + storyList.size());
-                getViewState().showStories(storyList);
-                getViewState().setRefreshingToSwipe(false);
+                if (storyList != null) {
+                    Log.d(TAG, "Presenter onCompleteCallback: " + storyList.size());
+                    getViewState().showStories(storyList);
+                } else {
+                    getViewState().showError("Connection error!");
+                }
+                // как протестировать?
+                getViewState().stopLoading();
             }
         });
     }

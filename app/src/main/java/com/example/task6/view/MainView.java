@@ -13,5 +13,9 @@ public interface MainView extends MvpView {
 
     void showStories(List<Story> storyList);
 
-    void setRefreshingToSwipe(Boolean isRefresh);
+    void startLoading();
+
+    void stopLoading();
+
+    void showError(String message);
 }

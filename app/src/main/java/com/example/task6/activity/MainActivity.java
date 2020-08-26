@@ -2,6 +2,8 @@ package com.example.task6.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,7 +34,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Adap
     private static final String TAG = "MyApp";
     @InjectPresenter
     MainPresenter mainPresenter;
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerViewClickListener recyclerViewClickListener;
     private RecyclerView recyclerView;
@@ -47,6 +48,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Adap
         initSwipeRefreshLayout();
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         mainPresenter.loadStories(adapterView.getSelectedItem().toString());
@@ -59,6 +61,28 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Adap
         //DO NOTHING
     }
 
+    @Override
+    public void showStories(List<Story> storyList) {
+        StoryAdapter storyAdapter = new StoryAdapter(storyList, recyclerViewClickListener);
+        recyclerView.setAdapter(storyAdapter);
+        initRecyclerViewClickListener();
+    }
+
+    @Override
+    public void startLoading() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void stopLoading() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
     private void init() {
         Spinner spinner = findViewById(R.id.spinner);
         ArrayAdapter<?> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.topics,
@@ -68,34 +92,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Adap
         recyclerView = findViewById(R.id.story_recycler);
     }
 
-    @Override
-    public void showStories(List<Story> storyList) {
-        StoryAdapter storyAdapter = new StoryAdapter(storyList, recyclerViewClickListener);
-        recyclerView.setAdapter(storyAdapter);
-        initRecyclerViewClickListener();
-    }
-
-    @Override
-    public void setRefreshingToSwipe(Boolean isRefresh) {
-        if (isRefresh){
-            swipeRefreshLayout.setRefreshing(true);
-        } else {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
     private void loadDefault() {
         mainPresenter.loadStories("SOFTWARE");
     }
 
-    private void initSwipeRefreshLayout(){
+    private void initSwipeRefreshLayout() {
         swipeRefreshLayout = findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mainPresenter.loadStoriesWithRefresher(currentTopic);
+                mainPresenter.loadStories(currentTopic);
                 Log.d(TAG, "onRefresh: swipe");
-                swipeRefreshLayout.setRefreshing(true);
             }
         });
     }

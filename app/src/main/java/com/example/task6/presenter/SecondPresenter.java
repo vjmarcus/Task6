@@ -14,7 +14,6 @@ public class SecondPresenter extends MvpPresenter<SecondView> {
 
     public SecondPresenter() {
         Log.d(TAG, "SecondPresenter:");
-        getViewState().showMessage("CONSTRUCTOR");
     }
 
 }

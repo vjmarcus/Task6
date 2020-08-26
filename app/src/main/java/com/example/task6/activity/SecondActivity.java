@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,7 +51,9 @@ public class SecondActivity extends MvpAppCompatActivity implements SecondView {
     private void loadFromIntent() {
             Intent intent = getIntent();
             story = (Story) intent.getSerializableExtra("obj");
-        Log.d(TAG, "loadFromIntent: " + story.getAuthor());
+        if (story != null) {
+            Log.d(TAG, "loadFromIntent: " + story.getAuthor());
+        }
     }
 
     @Override
